@@ -23,7 +23,8 @@ db.config
 
 #Compiled files
 map/
-**/src/**/dist/
+/*/dist/
+**/src/dist/
 **/wp-content/themes/**/dist/
 *.map
 
