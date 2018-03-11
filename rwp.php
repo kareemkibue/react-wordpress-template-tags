@@ -36,10 +36,11 @@ if ( !function_exists( 'rwp_get_the_content' ) ) :
 endif;
 
 /**
-* Renders WordPress theme navigation
+ * Renders WordPress theme navigation
+ * https://developer.wordpress.org/reference/functions/wp_nav_menu/
 */
 if ( !function_exists( 'rwp_get_nav' ) ) :
-    function rwp_get_nav ($menu_name) {
+    function rwp_get_nav ($menu_name, $return_html=false) {
        /*  $content = get_the_content($more_link_text, $stripteaser, $more_file);
         if ($with_formatting!=false){        
             $content = apply_filters('the_content', $content);
@@ -53,10 +54,20 @@ if ( !function_exists( 'rwp_get_nav' ) ) :
             'items_wrap' => '<ul class="list list-inline">%3$s</ul>')
         );  */
 
-        if ($menu_name != null){            
-            $locations = get_nav_menu_locations();
-            $menu_id = $locations[ $menu_name ];
-            return wp_get_nav_menu_items($menu_id);                        
+        if ($menu_name != null){
+            if ($return_html===true){                
+                return parse_and_escape( wp_nav_menu( array( 
+                    'echo' =>false,
+                    'theme_location' => $menu_name,      								
+                    // 'items_wrap' => '<ul>%3$s</ul>'
+                    )
+                )); 
+            }
+            else{
+                $locations = get_nav_menu_locations();
+                $menu_id = $locations[ $menu_name ];
+                return wp_get_nav_menu_items($menu_id);                        
+            }
         }
     }
 endif;
