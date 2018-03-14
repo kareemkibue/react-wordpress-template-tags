@@ -17,7 +17,7 @@ if ( !function_exists( 'rwp_render_component' ) ) :
 endif;
 
 /**
-* Renders parsed content
+* Returns parsed content
 */
 if ( !function_exists( 'rwp_get_the_content' ) ) :
     // http://www.web-templates.nu/2008/08/31/get_the_content-with-formatting/index.html    
@@ -25,13 +25,23 @@ if ( !function_exists( 'rwp_get_the_content' ) ) :
     function rwp_get_the_content ($with_formatting=true, $more_link_text = '(more...)', $stripteaser = 0, $more_file = '') {
         $content = get_the_content($more_link_text, $stripteaser, $more_file);
         if ($with_formatting!=false){        
-            $content = apply_filters('the_content', $content);
+            $the_content = apply_filters('the_content', $content);
             // $content = str_replace(']]>', ']]&gt;', $content);
 
             // $content = htmlspecialchars($content);
-            $content = escape_html_markup($content);
+            // $content = escape_html_markup($content);
         }
-        return $content;
+        return $the_content;
+    }
+endif;
+
+/**
+ * Returns the page title
+ */
+if ( !function_exists( 'rwp_get_the_title' ) ) :
+    function rwp_get_the_title () {
+        $the_title = get_the_title();        
+        return $the_title;
     }
 endif;
 
@@ -40,7 +50,7 @@ endif;
  * https://developer.wordpress.org/reference/functions/wp_nav_menu/
 */
 if ( !function_exists( 'rwp_get_nav' ) ) :
-    function rwp_get_nav ($menu_name, $return_html=false) {
+    function rwp_get_nav($menu_name, $return_html=false) {
        /*  $content = get_the_content($more_link_text, $stripteaser, $more_file);
         if ($with_formatting!=false){        
             $content = apply_filters('the_content', $content);
@@ -65,7 +75,7 @@ if ( !function_exists( 'rwp_get_nav' ) ) :
             }
             else{
                 $locations = get_nav_menu_locations();
-                $menu_id = $locations[ $menu_name ];
+                $menu_id = $locations[ $menu_name ];                
                 return wp_get_nav_menu_items($menu_id);                        
             }
         }
@@ -102,6 +112,8 @@ if ( !function_exists( 'parse_and_escape' ) ) :
         return escape_html_markup( $parsed_json );
     }
 endif;    
+
+
 
 
 ?>
