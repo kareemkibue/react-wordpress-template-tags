@@ -76,7 +76,37 @@ if ( !function_exists( 'rwp_get_nav' ) ) :
             else{
                 $locations = get_nav_menu_locations();
                 $menu_id = $locations[ $menu_name ];                
-                return wp_get_nav_menu_items($menu_id);                        
+                $nav_menu = wp_get_nav_menu_items($menu_id);
+                $rwp_posts = array();
+
+                foreach ( $nav_menu as $nav_menu_item ){
+
+                    $menu_item = array(
+                        'id' => $nav_menu_item->ID,
+                        'title' => $nav_menu_item->title,
+                        'url'=> $nav_menu_item->url,
+                        'parentID'=> $nav_menu_item->menu_item_parent,
+                        'children'=>array()
+                        // '_meta'=> get_post_meta($nav_menu_item->ID/* '_menu_item_object_id', true */ ),
+                        // '_nav'=> $nav_menu_item,                            
+                    );
+
+                    if ($nav_menu_item->menu_item_parent>0):
+                        array_push( 
+                            // $rwp_posts[(count($rwp_posts)-1)], 
+                            $rwp_posts[(count($rwp_posts)-1)][children], 
+                            $menu_item
+                        );
+                    
+                    else:
+                        array_push( 
+                            $rwp_posts, $menu_item
+                        ); 
+                    endif;
+                    
+                }
+                
+                return $rwp_posts;      
             }
         }
     }
@@ -113,7 +143,21 @@ if ( !function_exists( 'parse_and_escape' ) ) :
     }
 endif;    
 
-
-
+/**
+ * Truncate Text
+ * https://stackoverflow.com/questions/9219795/truncating-text-in-php#answer-9219884
+  */
+if ( !function_exists( 'rwp_truncate_text' ) ) :
+    function rwp_truncate_text($text, $chars = 90) {
+        if (strlen($text) <= $chars) {
+            return $text;
+        }
+        $text = $text." ";
+        $text = substr($text,0,$chars);
+        $text = substr($text,0,strrpos($text,' '));
+        $text = $text."...";
+        return $text;
+    }
+endif;    
 
 ?>
