@@ -4,7 +4,7 @@
 * Create a container HTMLElement with compoenent (meta)data
 */
 if ( !function_exists( 'rwp_render_component' ) ) :
-    function rwp_render_component($element = 'div', $component, $content, $title){
+    function rwp_render_component($element = 'div', $component, $content=null, $title=null){
         if ($element == null || $component == null)
             exit();
 
@@ -82,13 +82,14 @@ if ( !function_exists( 'rwp_get_nav' ) ) :
                 foreach ( $nav_menu as $nav_menu_item ){
 
                     $menu_item = array(
-                        'id' => $nav_menu_item->ID,
+                        // 'id' => $nav_menu_item->ID,
+                        'id' => $nav_menu_item->object_id,
                         'title' => $nav_menu_item->title,
                         'url'=> $nav_menu_item->url,
                         'parentID'=> $nav_menu_item->menu_item_parent,
-                        'children'=>array()
+                        'children'=>array(),
                         // '_meta'=> get_post_meta($nav_menu_item->ID/* '_menu_item_object_id', true */ ),
-                        // '_nav'=> $nav_menu_item,                            
+                        '_nav'=> $nav_menu_item,                            
                     );
 
                     if ($nav_menu_item->menu_item_parent>0):
